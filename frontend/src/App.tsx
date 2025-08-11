@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import SignupForm from './pages/SignupForm';
 import SigninForm from './pages/SigninForm';
 import DashboardPage from './pages/DashboardPage';
+import Error from './pages/Error';
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Route path='/signup' element={<SignupForm />} />
         <Route path='/signin' element={<SigninForm />} />
         <Route path='/dashboard' element={<DashboardPage />} />
+        <Route path='*' element={<Error />} />
       </Routes>
     </Router>
   )

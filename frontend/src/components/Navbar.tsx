@@ -10,7 +10,7 @@ function Navbar() {
             Report<span className="text-red-500">Piracy</span>
           </Link>
           <Link to='/signup'>
-            <button className="text-white bg-gray-600 hover:bg-gray-700 py-3 px-5 rounded-md text-base max-md:py-2 max-md:px-3 max-md:text-[0.7rem] cursor-pointer">
+            <button className="font-bold text-white bg-gray-600 hover:bg-gray-700 py-3 px-5 rounded-md text-base max-md:py-2 max-md:px-3 max-md:text-[0.7rem] cursor-pointer">
                 Report Now
             </button>
           </Link>

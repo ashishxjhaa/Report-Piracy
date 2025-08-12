@@ -5,6 +5,9 @@ import SignupForm from './pages/SignupForm';
 import SigninForm from './pages/SigninForm';
 import DashboardPage from './pages/DashboardPage';
 import Error from './pages/Error';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
@@ -14,9 +17,12 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/signup' element={<SignupForm />} />
         <Route path='/signin' element={<SigninForm />} />
-        <Route path='/dashboard' element={<DashboardPage />} />
+        <Route path="/dashboard" element={<ProtectedRoute> <DashboardPage /></ProtectedRoute>} />
         <Route path='*' element={<Error />} />
       </Routes>
+
+      <ToastContainer position="top-right" autoClose={3000} />
+      
     </Router>
   )
 }

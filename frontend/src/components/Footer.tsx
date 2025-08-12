@@ -11,7 +11,7 @@ function Footer() {
           </Link>
         </div>
         <p className="text-base text-white/50 mb-1 max-md:leading-tight max-md:text-xs max-md:mb-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-copyright mr-1 text-white/50 inline max-md:w-3 max-md:m-0 max-md:mr-0.5"><circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-copyright mr-1 text-white/50 inline max-md:w-3 max-md:m-0 max-md:mr-0.5"><circle cx="12" cy="12" r="10"/><path d="M14.83 14.83a4 4 0 1 1 0-5.66"/></svg>
           2026 ReportPiracy Private Limited
         </p>
         <p className="text-white/50 text-base max-md:text-xs">

@@ -26,54 +26,80 @@ const signupSchema = z.object({
 });
 
 app.post('/api/auth/signup', async (req, res) => {
-    const parseResult = signupSchema.safeParse(req.body);
+    try {
+        const parseResult = signupSchema.safeParse(req.body);
 
-    if (!parseResult.success) {
-        return res.status(400).json({
-            errors: "All fields required"
+        if (!parseResult.success) {
+            return res.status(400).json({
+                errors: "All fields required"
+            })
+        }
+
+        const { fullName, email, password } = parseResult.data;
+
+        const hashedPassword = await bcrypt.hash(password, 5);
+
+        const newUser = await User.create({
+            fullName,
+            email,
+            password: hashedPassword
+        });
+
+        res.json({
+            message: "Signup Done"
         })
+    } catch (err: any) {
+        if (err.code === 11000 && err.keyPattern?.email) {
+            return res.status(400).json({
+                error: "Email already exists"
+            });
+        }
+
+        res.status(500).json({
+            error: "Internal Server Error"
+        });
     }
-
-    const { fullName, email, password } = parseResult.data;
-
-    const hashedPassword = await bcrypt.hash(password, 5);
-
-    const newUser = await User.create({
-        fullName,
-        email,
-        password: hashedPassword
-    });
-
-    res.json({
-        message: "Signup Done"
-    })
 })
 
 app.post('/api/auth/signin', async (req, res) => {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) {
-        return res.status(400).json({
-            error: "User not found"
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({
+                error: "User not found"
+            });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password!);
+        if (!isPasswordValid) {
+            return res.status(400).json({ 
+                error: "Invalid password" 
+            });
+        }
+
+        const token = jwt.sign({
+            userId: user._id
+        }, process.env.JWT_SECRET!)
+
+        res.json({
+            token
+        });
+    } catch (err) {
+        console.error("Signin Error:", err);
+        res.status(500).json({
+            error: "Internal Server Error"
         });
     }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password!);
-    if (!isPasswordValid) {
-        return res.status(400).json({ 
-            error: "Invalid password" 
-        });
-    }
-
-    const token = jwt.sign({
-        userId: user._id
-    }, process.env.JWT_SECRET!)
-
-    res.json({
-        token
-    });
 })
+
+app.get("/api/dashboard", verifyToken, (req, res) => {
+    res.json({ 
+        message: "Welcome to your dashboard" 
+    });
+});
+
 
 app.get('/api/creators', (req, res) => {
   res.json(creators.map(c => ({ name: c.name })));
@@ -143,7 +169,7 @@ async function main() {
     try {
         await mongoose.connect(process.env.MONGO_URI!);
         app.listen(3001, () => {
-            console.log("Port is listing on 3000")
+            console.log("Port is listing on 3001")
         });
     } catch (e) {
         console.log("DB connection error")

@@ -79,7 +79,7 @@ app.post('/api/auth/signin', (req, res) => __awaiter(void 0, void 0, void 0, fun
             });
         }
         const token = jsonwebtoken_1.default.sign({
-            userId: user._id
+            userId: user._id,
         }, process.env.JWT_SECRET);
         res.json({
             token
@@ -97,6 +97,18 @@ app.get("/api/dashboard", middleware_1.verifyToken, (req, res) => {
         message: "Welcome to your dashboard"
     });
 });
+app.get('/api/me', middleware_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        //@ts-ignore
+        const user = yield db_1.User.findById(req.user.userId).select('fullName');
+        res.json(user);
+    }
+    catch (err) {
+        res.status(500).json({
+            message: 'Error fetching user'
+        });
+    }
+}));
 app.get('/api/creators', (req, res) => {
     res.json(creators_1.creators.map(c => ({ name: c.name })));
 });

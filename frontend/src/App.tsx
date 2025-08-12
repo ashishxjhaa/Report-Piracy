@@ -8,6 +8,7 @@ import Error from './pages/Error';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
 
@@ -17,7 +18,8 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/signup' element={<SignupForm />} />
         <Route path='/signin' element={<SigninForm />} />
-        <Route path="/dashboard" element={<ProtectedRoute> <DashboardPage /></ProtectedRoute>} />
+        <Route path='/dashboard' element={<ProtectedRoute> <DashboardPage /></ProtectedRoute>} />
+        <Route path='/me' element={<ProtectedRoute> <ProfilePage /></ProtectedRoute>} />
         <Route path='*' element={<Error />} />
       </Routes>
 

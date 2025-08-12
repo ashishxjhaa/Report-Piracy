@@ -35,7 +35,7 @@ function SignupForm() {
       <Navbar showSpecialButton={false} />
       <div className="flex flex-col items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y mt-8 md:space-y-6">
-
+          
 
           <div className="mb-8 text-center">
             <div className="flex flex-col items-center gap-2 group">

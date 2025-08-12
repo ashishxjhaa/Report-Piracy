@@ -80,7 +80,7 @@ app.post('/api/auth/signin', async (req, res) => {
         }
 
         const token = jwt.sign({
-            userId: user._id
+            userId: user._id,
         }, process.env.JWT_SECRET!)
 
         res.json({
@@ -100,6 +100,21 @@ app.get("/api/dashboard", verifyToken, (req, res) => {
     });
 });
 
+app.get('/api/me', verifyToken, async (req, res) => {
+    try{
+        //@ts-ignore
+        const user = await User.findById(req.user.userId).select('fullName');
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ 
+            message: 'Error fetching user'
+        });
+    }
+})
+
+app.get('/api/profile', verifyToken, async (req, res) => {
+    
+})
 
 app.get('/api/creators', (req, res) => {
   res.json(creators.map(c => ({ name: c.name })));

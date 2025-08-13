@@ -213,8 +213,9 @@ app.delete('/api/report/delete', verifyToken, async (req, res) => {
 async function main() {
     try {
         await mongoose.connect(process.env.MONGO_URI!);
-        app.listen(3001, () => {
-            console.log("Port is listing on 3001")
+        const port = process.env.PORT || 3001;
+        app.listen(port, () => {
+            console.log(`Server running on port ${port}`)
         });
     } catch (e) {
         console.log("DB connection error")

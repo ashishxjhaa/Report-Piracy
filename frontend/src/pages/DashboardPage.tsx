@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 axios.get("http://localhost:3001/api/dashboard", {
   headers: {
@@ -11,6 +12,18 @@ axios.get("http://localhost:3001/api/dashboard", {
 
 function DashboardPage() {
   const [fullName, setFullName] = useState('');
+  const [reports, setReports] = useState<{ _id: string }[]>([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
+ 
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/me', {
@@ -27,6 +40,21 @@ function DashboardPage() {
     })
   }, []);
 
+  const fetchReports = () => {
+    axios.get<{ reports: { _id: string }[] }>('http://localhost:3001/api/report', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(res => setReports(res.data.reports))
+    .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    fetchReports();
+  }, [location]);
+
+
   return (
     <div className="w-full min-h-screen bg-slate-900">
       <div className="fixed top-0 w-full h-25 border-b border-white/10 backdrop-blur-xl p-3 z-50">
@@ -42,10 +70,40 @@ function DashboardPage() {
               {fullName}
             </span>
           </div>
+          <div onClick={handleLogout} className="text-slate-200 flex justify-center items-center cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
+            <span className="ml-2">Logout</span>
+          </div>
         </div>
-        <div className="text-slate-50 mt-8">
-        Hi
-      </div>
+
+
+        <div className="w-full flex flex-col justify-center md:items-center items-center space-y-4 max-md:space-y-7 max-md:py-14 pt-10 pb-20">
+          <div className="flex gap-7 max-md:flex-col max-md:gap-5 flex-wrap justify-center">
+            <div className="text-slate-50 p-6 bg-gray-500/20 border border-gray-100/10 flex flex-col rounded-xl gap-2 text-lg font-medium max-md:p-4 max-md:gap-2 max-md:text-base">
+              <div className="flex p-8 w-fit max-md:p-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-icon lucide-send"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+                <h3 className="pl-4 text-slate-300">Total Reported Content</h3>
+              </div>
+              <div className="text-lg max-w-80 text-slate-50 mb-4 text-center">
+                {reports.length}
+              </div>
+              <Link to={'/view-content'}>
+                <div className="mt-2 mb-2 text-black text-center bg-indigo-400 hover:bg-indigo-300 rounded-md py-2 cursor-pointer w-full">
+                  View Content
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <Link to={'/dashboard-form'}>
+            <div className="font-bold mt-3 md:mt-7 mb-2 text-black text-center bg-red-500 hover:bg-red-400 rounded-md py-4 px-16 cursor-pointer w-full">
+              Report Pirated Content
+            </div>
+          </Link>
+
+        </div>
+
+        
       </div>
     </div>
   )

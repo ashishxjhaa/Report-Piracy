@@ -9,6 +9,8 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfilePage from './pages/ProfilePage';
+import ReportPage from './pages/ReportPage';
+import ContentPage from './pages/ContentPage';
 
 function App() {
 
@@ -19,6 +21,8 @@ function App() {
         <Route path='/signup' element={<SignupForm />} />
         <Route path='/signin' element={<SigninForm />} />
         <Route path='/dashboard' element={<ProtectedRoute> <DashboardPage /></ProtectedRoute>} />
+        <Route path='/dashboard-form' element={<ProtectedRoute> <ReportPage /></ProtectedRoute>} />
+        <Route path='/view-content' element={<ProtectedRoute> <ContentPage /></ProtectedRoute>} />
         <Route path='/me' element={<ProtectedRoute> <ProfilePage /></ProtectedRoute>} />
         <Route path='*' element={<Error />} />
       </Routes>

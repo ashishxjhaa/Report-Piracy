@@ -20,6 +20,7 @@ const signupSchema = new mongoose_1.default.Schema({
     password: {
         type: String,
         required: true,
+        minlength: 6,
     },
     createdAt: {
         type: Date,

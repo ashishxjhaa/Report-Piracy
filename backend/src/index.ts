@@ -100,6 +100,12 @@ app.get("/api/dashboard", verifyToken, (req, res) => {
     });
 });
 
+app.get("/api/dashboard-form", verifyToken, (req, res) => {
+    res.json({
+        message: "Report Pirated Content"
+    })
+})
+
 app.get('/api/me', verifyToken, async (req, res) => {
     try{
         //@ts-ignore
@@ -113,40 +119,64 @@ app.get('/api/me', verifyToken, async (req, res) => {
 })
 
 app.get('/api/profile', verifyToken, async (req, res) => {
-    
-})
+    try {
+        //@ts-ignore
+        const user = await User.findById(req.user.userId).select('fullName email createdAt');
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 app.get('/api/creators', (req, res) => {
   res.json(creators.map(c => ({ name: c.name })));
 });
 
 app.post('/api/report', verifyToken, async (req, res) => {
-    const { contentUrl, description, creatorName } = req.body;
+    try {
+        const { contentUrl, description, creatorName } = req.body;
 
-    const creator = creators.find(c => c.name === creatorName);
+        if (!contentUrl || !description || !creatorName) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
 
-    const report = await Report.create({
-        //@ts-ignore
-        userId: req.user.userId,
-        creatorName,
-        contentUrl,
-        description
-    });
+        if (description.length < 10) {
+            return res.status(400).json({ message: "Description must be at least 10 characters" });
+        }
 
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: { user: process.env.EMAIL, pass: process.env.EMAIL_PASS }
-    });
+        const creator = creators.find(c => c.name === creatorName);
 
-    await transporter.sendMail({
-        to: creator?.email,
-        subject: 'Piracy Report for Your Content',
-        text: `URL: ${contentUrl}\nDescription: ${description}`
-    });
+        const report = await Report.create({
+            //@ts-ignore
+            userId: req.user.userId,
+            creatorName,
+            contentUrl,
+            description
+        });
 
-    res.json({
-        message: "Reported Successfully", report
-    })
+        if (creator) {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: { user: process.env.EMAIL, pass: process.env.EMAIL_PASS }
+            });
+
+            await transporter.sendMail({
+                to: creator.email,
+                subject: 'Piracy Report for Your Content',
+                text: `URL: ${contentUrl}\nDescription: ${description}`
+            });
+        }
+
+        res.json({
+            message: "Reported Successfully", report
+        })
+    } catch (err: any) {
+        console.log(err);
+    }
 })
 
 app.get('/api/report', verifyToken, async (req, res) => {

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-axios.get("http://localhost:3001/api/dashboard-form", {
+axios.get("https://backend-report-piracy.onrender.com/api/dashboard-form", {
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`
   }
@@ -34,7 +34,7 @@ function ReportPage() {
         }
 
         try {
-            await axios.post("http://localhost:3001/api/report",
+            await axios.post("https://backend-report-piracy.onrender.com/api/report",
                 {
                     creatorName: selectedOption,
                     contentUrl,
@@ -61,7 +61,7 @@ function ReportPage() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:3001/api/me', {
+        axios.get('https://backend-report-piracy.onrender.com/api/me', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -76,7 +76,7 @@ function ReportPage() {
     }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/creators")
+    axios.get("https://backend-report-piracy.onrender.com/api/creators")
     .then(res => setDropdownOptions(res.data as { name: string }[]))
     .catch(err => console.error(err));
   }, []);

@@ -16,7 +16,7 @@ import { verifyToken } from "./middleware";
 import nodemailer from 'nodemailer';
 import { creators } from "./creators";
 
-app.use(cors())
+app.use(cors({origin: "https://reportpiracy.vercel.app", credentials: true,}))
 app.use(express.json());
 
 const signupSchema = z.object({

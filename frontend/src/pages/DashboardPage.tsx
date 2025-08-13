@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 
-axios.get("http://localhost:3001/api/dashboard", {
+axios.get("https://backend-report-piracy.onrender.com/api/dashboard", {
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`
   }
@@ -26,7 +26,7 @@ function DashboardPage() {
  
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/me', {
+    axios.get('https://backend-report-piracy.onrender.com/api/me', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -41,7 +41,7 @@ function DashboardPage() {
   }, []);
 
   const fetchReports = () => {
-    axios.get<{ reports: { _id: string }[] }>('http://localhost:3001/api/report', {
+    axios.get<{ reports: { _id: string }[] }>('https://backend-report-piracy.onrender.com/api/report', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

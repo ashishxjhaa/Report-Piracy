@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-axios.get("http://localhost:3001/api/report", {
+axios.get("https://backend-report-piracy.onrender.com/api/report", {
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`
   }
@@ -33,7 +33,7 @@ function ContentPage() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:3001/api/me', {
+        axios.get('https://backend-report-piracy.onrender.com/api/me', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -48,7 +48,7 @@ function ContentPage() {
     }, []);
 
     useEffect(() => {
-        axios.get<{ reports: Report[] }>("http://localhost:3001/api/report", {
+        axios.get<{ reports: Report[] }>("https://backend-report-piracy.onrender.com/api/report", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }

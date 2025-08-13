@@ -6,7 +6,7 @@ function ProfilePage() {
   const [profile, setProfile] = useState<{ fullName: string; email: string; createdAt: string } | null>(null);
 
   useEffect(() => {
-    axios.get<{ fullName: string; email: string; createdAt: string }>('http://localhost:3001/api/profile', {
+    axios.get<{ fullName: string; email: string; createdAt: string }>('https://backend-report-piracy.onrender.com/api/profile', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

@@ -29,7 +29,7 @@ function SignupForm() {
     }
 
     try {
-      const res = await axios.post("http://localhost:3001/api/auth/signup", formData);
+      const res = await axios.post("https://backend-report-piracy.onrender.com/api/auth/signup", formData);
         if (res.status === 200) {
           navigate("/signin");
           toast.success("Signup successful");

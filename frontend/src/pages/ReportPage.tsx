@@ -39,24 +39,31 @@ function ReportPage() {
         }
 
         try {
+          await toast.promise(
+            Promise.resolve(
             await axios.post("https://backend-report-piracy.onrender.com/api/report",
-                {
-                  creatorName: selectedOption,
-                  contentUrl,
-                  description,
-                },
-            {
+              {
+                creatorName: selectedOption,
+                contentUrl,
+                description,
+              },
+              {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-        }
-      );
-      toast.success("Reported Successfully");
-      navigate("/dashboard");
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to report content");
-    }
+              }
+            )
+          ),
+          {
+            loading: "Reporting...",
+            success: "Reported Successfully",
+            error: "Failed to report content",
+          }
+        );
+        navigate("/dashboard");
+      } catch (err) {
+        console.error(err);
+      }
   };
 
     const handleLogout = () => {
@@ -67,18 +74,18 @@ function ReportPage() {
 
 
     useEffect(() => {
-        axios.get('https://backend-report-piracy.onrender.com/api/me', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        .then(res => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            setFullName((res.data as unknown as any).fullName)
-        })
-        .catch(err => {
-            console.log(err);
-        })
+      axios.get('https://backend-report-piracy.onrender.com/api/me', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      .then(res => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setFullName((res.data as unknown as any).fullName)
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }, []);
 
   useEffect(() => {

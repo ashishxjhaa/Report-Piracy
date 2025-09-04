@@ -28,7 +28,7 @@ function ReportPage() {
           return;
         }
 
-        if (!/^(https?:\/\/(t\.me|chat\.whatsapp\.com)\/[^\s]+)$/.test(contentUrl)) {
+        if (!/^https?:\/\/[^\s]+$/.test(contentUrl)) {
           toast.error("Please enter a valid link");
           return;
         }

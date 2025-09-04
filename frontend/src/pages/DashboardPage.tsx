@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 axios.get("https://backend-report-piracy.onrender.com/api/dashboard", {
   headers: {
@@ -21,6 +22,7 @@ function DashboardPage() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
+    toast.success("Logged out");
   };
 
  

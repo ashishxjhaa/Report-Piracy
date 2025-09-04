@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 axios.get("https://backend-report-piracy.onrender.com/api/dashboard-form", {
   headers: {
@@ -24,21 +24,26 @@ function ReportPage() {
         e.preventDefault();
 
         if (!selectedOption || !contentUrl || !description) {
-            toast.error("All fields are required");
-            return;
+          toast.error("All fields are required");
+          return;
+        }
+
+        if (!/^(https?:\/\/(t\.me|chat\.whatsapp\.com)\/[^\s]+)$/.test(contentUrl)) {
+          toast.error("Please enter a valid link");
+          return;
         }
 
         if (description.length < 10) {
-            toast.error("Description must be at least 10 characters");
-            return;
+          toast.error("Description must be at least 10 characters");
+          return;
         }
 
         try {
             await axios.post("https://backend-report-piracy.onrender.com/api/report",
                 {
-                    creatorName: selectedOption,
-                    contentUrl,
-                    description,
+                  creatorName: selectedOption,
+                  contentUrl,
+                  description,
                 },
             {
                 headers: {
@@ -55,8 +60,9 @@ function ReportPage() {
   };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/");
+      localStorage.removeItem("token");
+      navigate("/");
+      toast.success("Logged out");
     };
 
 

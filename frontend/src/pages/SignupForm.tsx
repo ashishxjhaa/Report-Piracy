@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 function SignupForm() {
   const [formData, setFormData] = useState({
@@ -12,6 +12,8 @@ function SignupForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -29,14 +31,24 @@ function SignupForm() {
     }
 
     try {
-      const res = await axios.post("https://backend-report-piracy.onrender.com/api/auth/signup", formData);
-        if (res.status === 200) {
-          navigate("/signin");
-          toast.success("Signup successful");
+      setLoading(true);
+      await toast.promise(
+        Promise.resolve(axios.post("https://backend-report-piracy.onrender.com/api/auth/signup", formData)),
+        {
+          loading: "Creating account...", 
+          success: (res) => {
+            if (res.status === 200) {
+              navigate("/signin");
+            }
+            return "Signup successful";
+          },
+          error: "Signup failed!"
         }
+      );
     } catch (err) {
-      toast.error("Signup failed");
-      console.error("Request failed", err);
+      console.error(err);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -102,7 +114,7 @@ function SignupForm() {
                 </button>
               </div>
             </div>
-            <button type="submit" className="bg-indigo-400 hover:bg-indigo-300 rounded-md py-3 cursor-pointer text-black w-full">Create Account</button>
+            <button type="submit" disabled={loading} className="bg-indigo-400 hover:bg-indigo-300 rounded-md py-3 cursor-pointer text-black w-full">{loading ? "Loading..." : "Create Account"}</button>
           </form>
 
 

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Navbar from "../components/Navbar"
 import { useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 function SigninForm() {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ function SigninForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,13 +24,23 @@ function SigninForm() {
     }
 
     try {
-      const res = await axios.post("https://backend-report-piracy.onrender.com/api/auth/signin", formData);
-        localStorage.setItem("token", (res.data as { token: string }).token)
-        navigate('/dashboard');
-        toast.success("Signin successful");
+      setLoading(true);
+      await toast.promise(
+        Promise.resolve(axios.post("https://backend-report-piracy.onrender.com/api/auth/signin", formData)),
+        {
+          loading: "Signing in...",
+          success: (res) => {
+            localStorage.setItem("token", (res.data as { token: string }).token)
+            navigate('/dashboard');
+            return "Signin successful";
+          },
+          error: "Signin failed!"
+        }
+      );
     } catch (err) {
-      toast.error("Signin failed");
       console.error(err);
+      } finally {
+      setLoading(false)
     }
   };
 
@@ -83,7 +94,7 @@ function SigninForm() {
                 </button>
               </div>
             </div>
-            <button type="submit" className="bg-indigo-400 hover:bg-indigo-300 rounded-md py-3 cursor-pointer text-black w-full">Sign in</button>
+            <button type="submit" disabled={loading} className="bg-indigo-400 hover:bg-indigo-300 rounded-md py-3 cursor-pointer text-black w-full">{loading ? "Loading..." : "Sign in"}</button>
           </form>
 
 

@@ -6,8 +6,7 @@ import SigninForm from './pages/SigninForm';
 import DashboardPage from './pages/DashboardPage';
 import Error from './pages/Error';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
 import ProfilePage from './pages/ProfilePage';
 import ReportPage from './pages/ReportPage';
 import ContentPage from './pages/ContentPage';
@@ -27,7 +26,7 @@ function App() {
         <Route path='*' element={<Error />} />
       </Routes>
 
-      <ToastContainer position="top-right" autoClose={3000} />
+      <Toaster position="top-right" reverseOrder={false} />
       
     </Router>
   )
